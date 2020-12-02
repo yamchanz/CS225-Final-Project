@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <queue>
 
 #include "graph.h"
 #include "edge.h"
