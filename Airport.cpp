@@ -16,13 +16,7 @@ Airport::Airport(   ){
 long double Airport::findWeight(Vertex code1, Vertex code2){
     pair<long double, long double> coord1 = findCoord(Vertex code1);
     pair<long double, long double> coord2 = findCoord(Vertex code2);
-    return findDistance(coord1, coord2);
-}
-
-long double Airport::findDistance(pair<long double, long double> coord1, pair<long double, long double> coord2){
-    long double temp;
-    // on geeksforgeeks
-    return temp;
+    return calcDistance(coord1, coord2);
 }
 
 // lat is first, long is second
