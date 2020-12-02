@@ -1,5 +1,6 @@
 #include "Airport.h"
 #include <utility>
+#include <cmath>
 
 Airport::Airport(   ){
     for(Vertex i : AirportList){
@@ -7,7 +8,7 @@ Airport::Airport(   ){
     }
     for(Vertex j, k : RouteList){
         g_.insertEdge(Vertex code1, Vertex code2);
-        weight = findWeight(Vertex code1, Vertex code2);
+        double weight = findWeight(Vertex code1, Vertex code2);
         g_.setEdgeWeight(Vertex code1, Vertex code2);
     }
 }
@@ -24,10 +25,64 @@ double Airport::findDistance(pair<double, double> coord1, pair<double, double> c
     return temp;
 }
 
-vector<Edge> Airport::findShortestPath(Graph g_, Vertex source, Vertex destination){
-    for(Vertex v : g_){
-        int dist
+int Airport::minDistance(Graph g_, double distances[], bool included[]) {
+    double min = 24,859.734; //earth's circumference
+    int minIdx;
+    std::vector<Vertex> vertices = g_.getVertices();
+    for (int i = 0; i < vertices.size(); i++) {
+        if (!(included[i]) && distances[i] <= min) {
+            min = dist[i];
+            minIdx = i;
+        }
     }
+    return minIdx;
+}
+
+vector<Edge> Airport::findShortestPath(Graph g_, Vertex source, Vertex destination){
+    double maxDist = 24,859.734; //earth's circumference
+
+    std::vector<Vertex> vertices = g_.getVertices();
+    int sourceIdx;
+    for (int i = 0; i < vertices.size(); i++) {
+        if (vertices[i] == source) {
+            sourceIdx = i;
+            break;
+        }
+    }
+    double distances[g_.getVertices().size()];
+    bool included[g_.getVertices().size()];
+    for (int i = 0; i < g_.getVertices().size(); i++) {
+        distances[i] = maxDist;
+        included[i] = false;
+    }
+    distances[sourceIdx] = 0;
+
+    for (int i = 0; i < vertices.size() - 1; i++) {
+        int u = minDistance
+    }
+
+// lat is first, long is second
+long double Airport::calcDistance(pair<double, double> coord1, pair<double, double> coord2){
+	pair<long double, long double> radCoord1 = toRadians(coord1);
+	pair<long double, long double> radCoord2 = toRadians(coord2);
+	long double dlong = radCoord2.second - radCoord1.second;
+	long double dlat = radCoord2.first - radCoord1.first;
+	long double ans = pow(sin(dlat / 2), 2) + 
+			      cos(radCoord1.first) * cos(radCoord2.first) *
+			      pow(sin(dlong / 2), 2);
+	ans = asin(sqrt(ans) * 2; 
+	long double R = 3958.8;
+	return ans * R;
+}
+
+pair<long double, long double> Airport::toRadians(const pair<double, double> coord){
+	pair<long double, long double> temp;
+	temp.first = coord.first * M_PI / 180;
+	temp.second = coord.second * M_PI / 180;
+	return temp; 
+}
+
+
 /*
 Dijkstra(Graph, source, destination):
 
