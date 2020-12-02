@@ -11,21 +11,12 @@
 class Airport {
   public:
     Airport();
-    findWeight(Vertex code1, Vertex code2);
-    findDistance(pair<double, double> coord1, pair<double, double> coord2);
-    findShortestPath(Graph g, Vertex source, Vertex destination);
-/*
-    Airport(string name, string city, string country, string code, double latitude, double longitude);
-    ~Airport();
-    Airport();
-    string name_;
-    string city_;
-    string country_;
-    string code_;
-    double latitude_;
-    double longitude_;
-    private:
-*/
+    long double findWeight(Vertex code1, Vertex code2);
+    long double findDistance(pair<long double, long double> coord1, pair<long double, long double> coord2);
+    pair<long double, long double> toRadians(const pair<long double, long double> coord);
+    vector<Edge> findShortestPath(Graph g, Vertex source, Vertex destination);
+    int minDistance(Graph g_, long double distances[], bool included[]);
+    
   private:
     Graph g_;
     Vertex startingVertex_;
