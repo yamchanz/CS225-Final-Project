@@ -1,15 +1,11 @@
 #include "Airport.h"
-#include <fstream>
 #include <utility>
 
-using std::string;
-using std::ifstream;
-
 Airport::Airport(   ){
-    for(i : AirportList){
+    for(Vertex i : AirportList){
         g_.insertVertex(Vertex code);
     }
-    for(j : RouteList){
+    for(Vertex j, k : RouteList){
         g_.insertEdge(Vertex code1, Vertex code2);
         weight = findWeight(Vertex code1, Vertex code2);
         g_.setEdgeWeight(Vertex code1, Vertex code2);
@@ -28,7 +24,10 @@ double Airport::findDistance(pair<double, double> coord1, pair<double, double> c
     return temp;
 }
 
-vector<Edge> Airport::findShortestPath(Vertex code1, Vertex code2){
+vector<Edge> Airport::findShortestPath(Graph g_, Vertex source, Vertex destination){
+    for(Vertex v : g_){
+        int dist
+    }
 /*
 Dijkstra(Graph, source, destination):
 

@@ -7,14 +7,13 @@
 #include "graph.h"
 #include "edge.h"
 
-
-using std::string;
 //code is key
 class Airport {
   public:
     Airport();
     findWeight(Vertex code1, Vertex code2);
     findDistance(pair<double, double> coord1, pair<double, double> coord2);
+    findShortestPath(Graph g, Vertex source, Vertex destination);
 /*
     Airport(string name, string city, string country, string code, double latitude, double longitude);
     ~Airport();
