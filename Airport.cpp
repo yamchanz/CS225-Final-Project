@@ -1,6 +1,9 @@
 #include "Airport.h"
 #include <utility>
 #include <cmath>
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
 
 Airport::Airport(   ){
     for(Vertex i : AirportList){
@@ -40,60 +43,53 @@ pair<long double, long double> Airport::toRadians(const pair<long double, long d
 	return temp; 
 }
 
+vector<Vertex> Airport::findShortestPath(Graph g_, Vertex source, Vertex destination){
+    long double maxDist = 24859.734; //earth's circumference
+    unordered_map<Vertex, double> distances;
+    unordered_map<Vertex, Vertex> prev;
+    vector<Vertex> vertices = g_.getVertices();
+    vector<Vertex> v;
+    vector<Vertex> path;
 
-int Airport::minDistance(Graph g_, long double distances[], bool included[]) {
-    double min = 24,859.734; //earth's circumference
-    int minIdx;
-    std::vector<Vertex> vertices = g_.getVertices();
-    for (int i = 0; i < vertices.size(); i++) {
-        if (!(included[i]) && distances[i] <= min) {
-            min = dist[i];
-            minIdx = i;
-        }
-    }
-    return minIdx;
-}
+    auto compare = [&](Vertex left, Vertex right) { 
+        return distances[left] > distances[right]; 
+    };
 
-vector<Edge> Airport::findShortestPath(Graph g_, Vertex source, Vertex destination){
-    long double maxDist = 24,859.734; //earth's circumference
-
-    std::vector<Vertex> vertices = g_.getVertices();
-    int sourceIdx;
     for (int i = 0; i < vertices.size(); i++) {
         if (vertices[i] == source) {
-            sourceIdx = i;
+            distances[source] = 0;
+        } else {
+            distances[vertices[i]] = maxDist;
+        }
+        v.push_back(vertices[i]);
+        std::push_heap(std::begin(v), std::end(v), compare);
+    }
+    
+    while (!(v.empty())) {
+        std::pop_heap(std::begin(v), std::end(v), compare);
+        Vertex min = v.back();
+        v.pop_back();
+        if (min == destination) {
+            while (prev.find(min) != std::end(prev)) {
+                path.push_back(min);
+                min = prev[min];
+            }
             break;
         }
+        if (distances[min] == maxDist) {
+            break;
+        }
+        std::vector<Vertex> adj = g_.getAdjacent(min);
+        for (int i = 0; i < adj.size(); i++) {
+            double comp = distances[min] + findWeight(min, adj[i]);
+            if (comp < distances[adj[i]]) {
+                distances[adj[i]] = comp;
+                prev[adj[i]] = min;
+                std::make_heap(std::begin(v), std::end(v), compare);
+            }
+        }
     }
-    long double distances[g_.getVertices().size()];
-    bool included[g_.getVertices().size()];
-    for (int i = 0; i < g_.getVertices().size(); i++) {
-        distances[i] = maxDist;
-        included[i] = false;
-    }
-    distances[sourceIdx] = 0;
-
-    for (int i = 0; i < vertices.size() - 1; i++) {
-        int u = minDistance
-    }
-    /*
-Dijkstra(Graph, source, destination):
-
-  initialize distances  // initialize tentative distance value
-  initialize previous   // initialize a map that maps current node -> its previous node
-  initialize priority_queue   // initialize the priority queue
-  initialize visited
-
-  while the top of priority_queue is not destination:
-      get the current_node from priority_queue
-      for neighbor in current_node's neighbors and not in visited:
-          if update its neighbor's distances:
-              previous[neighbor] = current_node
-      save current_node into visited
-
-  extract path from previous
-  return path and distance
-*/
+    return path;
 }
 
 // lat is first, long is second
