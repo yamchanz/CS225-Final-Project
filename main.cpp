@@ -7,18 +7,19 @@ using std::string;
 
 int main() {
 
-
+/*
     //populates graph with all the airports, unconnected
     std::ifstream airportFile("airports.txt");
     string line;
     if (airportFile.is_open()) {
         while (getline(airportFile, line)) {
-            Airport currNode = Airport();
+            Value currNode = Value();
             int commas = 0;
             int prev = 0;
             int curr = 0;
             string str;
             //goes through each line, character by character
+            //push each to dictionary with keys
             for (char c : line) {
                 if (c == ',') {
                     commas++;
@@ -30,7 +31,9 @@ int main() {
                     //city case
                     else if (commas == 3) {currNode.city_ = str;}
                     //country case
-                    else if (commas == 4) {currNode.country_ = str;}
+                    else if (commas == 4) {currNode.country_ = str;
+                    //populate graph here
+                    }
                     //3-letter code case
                     else if (commas == 5) {currNode.code_ = str;}
                     //latitude case
@@ -52,7 +55,6 @@ int main() {
     string line2;
     if (edgeFile.is_open()) {
         while (getline(edgeFile, line2)) {
-            Airport currNode = Airport();
             int commas = 0;
             int prev = 0;
             int curr = 0;
@@ -80,7 +82,7 @@ int main() {
                 }
             }
         }
-    }
+    }*/
 
 
     return 0;
