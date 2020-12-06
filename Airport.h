@@ -11,13 +11,13 @@
 class Airport {
   public:
     /**
-     * Constructor to create a graph, `g_` representing all of the routes through
+     * Constructor to create a graph, `g_`, representing all of the routes through
      * airports. Vertices are airport IATA codes, edges are routes and edge 
      * weights are distances.
      */
     Airport();
     /**
-     * Constructor to create a graph, `g_` representing all of the routes through
+     * Constructor to create a graph, `g_`, representing all of the routes through
      * airports. Vertices are airport IATA codes, edges are routes and edge 
      * weights are distances.
      * @param portFile - raw Airport data file to parse.
