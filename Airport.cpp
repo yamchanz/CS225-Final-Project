@@ -83,18 +83,6 @@ Airport::Airport(std::string portFile, std::string routeFile)
         }
     }
 }
-//###############################################333
-
-/*Airport::Airport(   ){
-    for(Vertex i : AirportList){
-        g_.insertVertex(Vertex code);
-    }
-    for(Vertex j, k : RouteList){
-        g_.insertEdge(Vertex code1, Vertex code2);
-        long double weight = findWeight(Vertex code1, Vertex code2);
-        g_.setEdgeWeight(Vertex code1, Vertex code2);
-    }
-}*/
 
 long double Airport::findWeight(string code1, string code2) {
     Values src = airportList[code1];
