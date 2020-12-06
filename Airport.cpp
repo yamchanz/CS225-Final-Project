@@ -1,10 +1,11 @@
-#include "Airport.h"
-#include <fstream> // new
+#include <fstream> 
 #include <utility>
 #include <cmath>
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
+
+#include "Airport.h"
 #include "Values.h"
 
 using std::string;
@@ -83,8 +84,6 @@ Airport::Airport(std::string portFile, std::string routeFile)
     }
 }
 //###############################################333
-
-
 
 /*Airport::Airport(   ){
     for(Vertex i : AirportList){
@@ -174,29 +173,3 @@ vector<Vertex> Airport::findShortestPath(Graph g_, Vertex source, Vertex destina
     }
     return path;
 }
-
-// lat is first, long is second
-/*
-long double Airport::calcDistance(pair<double, double> coord1, pair<double, double> coord2){
-	pair<long double, long double> radCoord1 = toRadians(coord1);
-	pair<long double, long double> radCoord2 = toRadians(coord2);
-	long double dlong = radCoord2.second - radCoord1.second;
-	long double dlat = radCoord2.first - radCoord1.first;
-	long double ans = pow(sin(dlat / 2), 2) + 
-			      cos(radCoord1.first) * cos(radCoord2.first) *
-			      pow(sin(dlong / 2), 2);
-	ans = asin(sqrt(ans) * 2; 
-	long double R = 3958.8;
-	return ans * R;
-}*/
-/*
-pair<long double, long double> Airport::toRadians(const pair<double, double> coord){
-	pair<long double, long double> temp;
-	temp.first = coord.first * M_PI / 180;
-	temp.second = coord.second * M_PI / 180;
-	return temp; 
-}*/
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////
