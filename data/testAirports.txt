@@ -1,0 +1,13 @@
+1,"name:1","city:1","country:1","C:1","C4:1",1.1,1.1,x,x,"DST:1","Tz:1","type:airport1","source:1"
+2,"name:2","city:2","country:2","C:2","C4:2",2.22,2.22,x,x,"DST:2","Tz:2","type:airport2","source:2"
+3,"name:3","city:3","country:3","C:3","C4:3",3.333,3.333,x,x,"DST:3","Tz:3","type:airport3","source:3"
+4,"name:4","city:4","country:4","C:4","C4:4",4.4444,4.4444,x,x,"DST:4","Tz:4","type:airport4","source:4"
+5,"name:5","city:5","country:5","C:5","C4:5",5,5.55,x,x,"DST:5","Tz:5","type:airport5","source:5"
+6,"name:6","city:6","country:6","C:6","C4:6",6.66,6,x,x,"DST:6","Tz:6","type:airport6","source:6"
+7,"name:7","city:7","country:7","C:7","C4:7",7,7,x,x,"DST:7","Tz:7","type:airport7","source:7"
+8,"name:8","city:8","country:8","C:8","C4:8",8,8,x,x,"DST:8","Tz:8","type:airport8","source:8"
+9,"name:9","city:9","country:9","C:9","C4:9",9,9,x,x,"DST:9","Tz:9","type:airport9","source:9"
+10,"name:10","city:10","country:10","C10","C4:10",10,10,x,x,"DST:10","Tz:10","type:airport10","source:10"
+11,"name:11","city:11","country:11","C:11","C4:11",11,11,x,x,"DST:11","Tz:11","type:airport11","source:11"
+1000,"name:1000","city:1000","country:1000","Cxx","C4:1000",1000,1000,x,x,"DST:1000","Tz:1000","type:airport1000","source:1000"
+312,3,123,1,222,312,3,213,12,31,23,,213,,123,1,23,12,31,23,12,3

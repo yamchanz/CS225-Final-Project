@@ -1,13 +1,15 @@
 
 #include "Airport.h"
+#include <iostream>
+#include <stdlib.h>
+#include <exception>
 
 using std::string;
 
-//NICK A's ITERATION ####################################33
 //Main constructor, builds based on our two full database txt data
 Airport::Airport()
 : g_(true,true)
-{Airport("airports.txt", "routes.txt");}
+{Airport("data/airports.txt", "data/routes.txt");}
 
 //builds graph, and unorderedmap of airports, where edges are the routes
 Airport::Airport(std::string portFile, std::string routeFile)
@@ -24,24 +26,48 @@ Airport::Airport(std::string portFile, std::string routeFile)
             string str;
             //goes through each line, character by character
             for (char c : line) {
+                curr++;
                 if (c == ',') {
                     commas++;
-                    curr++;
                     //parse the sections and save to the value keyed pair
-                    str = line.substr(prev + 1, curr-prev);
-                    if (commas == 2) {V.name_ = str;}
-                    else if (commas == 3) {V.city_ = str;}
-                    else if (commas == 4) {V.country_ = str;}
+                    if (curr-prev <= 1) {break;}
+                    if (commas == 2) {
+                        str = line.substr(prev + 1, curr-prev - 3);
+                        V.name_ = str;}
+                    else if (commas == 3) {
+                        str = line.substr(prev + 1, curr-prev - 3);
+                        V.city_ = str;}
+                    else if (commas == 4) {
+                        str = line.substr(prev + 1, curr-prev - 3);
+                        V.country_ = str;}
                     //doesnt add the item if the code isn't exactly 3 letters
-                    else if (commas == 5) {if (str.length() != 3) {continue;}
+                    else if (commas == 5) {
+                        str = line.substr(prev + 1, curr-prev - 3);
+                        if (str.length() != 3) {
+                            break;}
                         V.code_ = str;}
-                    else if (commas == 7) {V.latitude_ = std::stod(str);}
+                    else if (commas == 7) {
+                        //i have no idea why this is minus 1 and not 2
+                        str = line.substr(prev, curr-prev - 1);
+                        //catch blocks in case position does not have double data
+                        try {V.latitude_ = std::stold(str);}
+                        catch (std::exception& e) {
+                            std::cout << "LATITUDE EXCEPTION" << std::endl;
+                            continue;
+                        }
+                    }
                     else if (commas == 8) {
-                        V.longitude_ = std::stod(str);
-
+                        str = line.substr(prev, curr-prev - 1);
+                        try{V.longitude_ = std::stold(str);}
+                        catch (std::exception& e) {
+                            std::cout << "LONGITUDE EXCEPTION" << std::endl;
+                            continue;
+                        }
+                        //std::cout << V.to_string() << std::endl;
                         g_.insertVertex(V.code_);
                         airportList[V.code_] = V;
                     }
+                    //std::cout << "P: " << prev << " C: " << curr << " " << str << std::endl;
                     prev = curr;
                 }
             }
@@ -53,24 +79,26 @@ Airport::Airport(std::string portFile, std::string routeFile)
     string line2;
     if (edgeFile.is_open()) {
         while (getline(edgeFile, line2)) {
-            int commas = 0;
-            int prev = 0;
-            int curr = 0;
-            string str, source;
+            int commas2 = 0;
+            int prev2 = 0;
+            int curr2 = 0;
+            string str2, source;
             //goes through each line, character by character
             for (char c : line2) {
+                curr2++;
                 if (c == ',') {
-                    commas++;
-                    curr++;
+                    commas2++;
                     //parse source and destination 3 letter codes
-                    str = line2.substr(prev + 1, curr-prev);
-                    if (commas == 3) {source = str;}
-                    else if (commas == 5) {
+                    if (curr2-prev2 <= 1) {break;}
+                    str2 = line2.substr(prev2, curr2-prev2 - 1);
+                    if (commas2 == 3) {source = str2;}
+                    else if (commas2 == 5) {
                         //populates graph with weighted edge of distance
-                        g_.insertEdge(source,str);
-                        g_.setEdgeWeight(source, str, findWeight(source, str) );
+                        //if (source.length() != 3 || str2.length() != 3) {break;}
+                        g_.insertEdge(source,str2);
+                        g_.setEdgeWeight(source, str2, findWeight(source, str2) );
                     }
-                    prev = curr;
+                    prev2 = curr2;
                 }
             }
         }
@@ -153,6 +181,12 @@ vector<Vertex> Airport::findShortestPath(Graph g_, Vertex source, Vertex destina
         }
     }
     return path;
+}
+std::unordered_map<string, Values> Airport::getAirportList() {
+    return airportList;
+}
+Graph Airport::getGraph() {
+    return g_;
 }
 
 PNG* Airport::drawMap(vector<Vertex> vertices, vector<Edge> edges){

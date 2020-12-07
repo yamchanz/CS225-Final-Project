@@ -68,7 +68,15 @@ class Airport {
      * @returns PNG of mercator map with graph.
      */
     PNG* drawMap(vector<Vertex> vertices, vector<Edge> edges);
-        
+
+    /**
+     * @returns airportList private variable.
+     */ 
+    std::unordered_map<string, Values> getAirportList();
+    /** 
+     * @returns g_ (graph) private variable.
+     */ 
+    Graph getGraph();
   private:
     Graph g_;
     Vertex startingVertex_;

@@ -8,6 +8,7 @@ class Values {
     Values(string name, string city, string country, string code, long double latitude, long double longitude);
     Values();
     string to_string();
+    bool operator==(const Values &rhs) const;
     string name_;
     string city_;
     string country_;
