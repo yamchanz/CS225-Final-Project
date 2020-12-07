@@ -251,18 +251,38 @@ vector<Vertex> Airport::findShortestWeightedPath(Graph g_, Vertex source, Vertex
     }
     return path;
 }
+
 std::unordered_map<string, Values> Airport::getAirportList() {
     return airportList;
 }
+
 Graph Airport::getGraph() {
     return g_;
 }
 
-PNG* Airport::drawMap(vector<Vertex> vertices, vector<Edge> edges){
+PNG* Airport::drawMap(){
     PNG* map = new PNG;
     map->readFromFile("mercatorMap.png");
-
-
-    // in progress..
+    
+    for(auto it = airportList.begin(); it != airportList.end(); it++){
+        Vertex source = it->first;
+        Values val = it->second;
+        long double source_lat = val.latitude_;
+        long double source_long = val.longitude_;
+        vector<Vertex> destinations = g_.getAdjacent(source);
+        for(Vertex & dest : destinations){
+            long double dest_lat = airportList[dest].latitude_;
+            long double dest_long = airportList[dest].longitude_;
+            drawMapHelper(map, source_lat, source_long, dest_lat, dest_long);
+        }
+    }
     return map;
+}
+
+void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long double dLat, long double dLong){
+    const unsigned mapWidth = 1250;
+    const unsigned mapHeight = 1400; 
+//might have to do straight line
+    
+
 }

@@ -14,6 +14,7 @@
 #include "cs225/PNG.h"
 #include "cs225/HSLAPixel.h"
 
+using namespace std;
 using namespace cs225;
 
 class Airport {
@@ -42,8 +43,8 @@ class Airport {
     /**
      * Helper function for findWeight, calculates distance between two coordinates
      * on Earth.
-     * @param coord1 - source pair of latitude, longitude coordinates.
-     * @param coord2 - destination pair of latitude, longitude coordinates.  
+     * @param coord1 - source pair of <latitude, longitude> coordinates.
+     * @param coord2 - destination pair of <latitude, longitude> coordinates.  
      * @returns distance between two points.
      */
     long double calcDistance(pair<long double, long double> coord1, pair<long double, long double> coord2);
@@ -51,7 +52,7 @@ class Airport {
      * Helper function for calcDistance, converts pair of <latitude, longitude> from
      * degrees to radians.
      * on Earth.
-     * @param coord - pair of latitude, longitude coordinates to convert.
+     * @param coord - pair of <latitude, longitude> coordinates to convert.
      * @returns pair of <latitude, longitude> in radians.
      */
     pair<long double, long double> toRadians(const pair<long double, long double> coord);
@@ -74,12 +75,19 @@ class Airport {
     /**
      * Draws vertices and edges onto a mercator projection PNG.
      * Using PNG "Planeet Zee" by De Hauwere, Nathalie from marineregions.org
-     * @param vertices - vector of vertices to draw onto map.
-     * @param edges - vector of edges to draw onto map.
+     * Needs Graph g_ to be subset of data to work. 
      * @returns PNG of mercator map with graph.
      */
-    PNG* drawMap(vector<Vertex> vertices, vector<Edge> edges);
-
+    PNG* drawMap();
+    /**
+     * Helper for drawMap().
+     * @param map - PNG to edit
+     * @param sLat - source latitude in a route
+     * @param sLong - source longitude in a route
+     * @param dLat - destination latitude in a route
+     * @param dLong - destination longitude in a route
+     */
+    void drawMapHelper(PNG* map, long double sLat, long double sLong, long double dLat, long double dLong);
     /**
      * @returns airportList private variable.
      */ 
