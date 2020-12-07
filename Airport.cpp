@@ -1,12 +1,5 @@
-#include <fstream> 
-#include <utility>
-#include <cmath>
-#include <unordered_map>
-#include <vector>
-#include <algorithm>
 
 #include "Airport.h"
-#include "Values.h"
 
 using std::string;
 
@@ -160,4 +153,13 @@ vector<Vertex> Airport::findShortestPath(Graph g_, Vertex source, Vertex destina
         }
     }
     return path;
+}
+
+PNG* Airport::drawMap(vector<Vertex> vertices, vector<Edge> edges){
+    PNG* map = new PNG;
+    map->readFromFile("mercatorMap.png");
+
+
+    // in progress..
+    return map;
 }

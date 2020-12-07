@@ -1,5 +1,9 @@
 #pragma once
 
+#include <fstream> 
+#include <utility>
+#include <cmath>
+#include <unordered_map>
 #include <vector>
 #include <algorithm>
 #include <queue>
@@ -7,6 +11,10 @@
 #include "graph.h"
 #include "edge.h"
 #include "Values.h"
+#include "cs225/PNG.h"
+#include "cs225/HSLAPixel.h"
+
+using namespace cs225;
 
 class Airport {
   public:
@@ -52,6 +60,14 @@ class Airport {
      * @returns vector of vertices of path.
      */
     vector<Vertex> findShortestPath(Graph g, Vertex source, Vertex destination);
+    /**
+     * Draws vertices and edges onto a mercator projection PNG.
+     * Using PNG "Planeet Zee" by De Hauwere, Nathalie from marineregions.org
+     * @param vertices - vector of vertices to draw onto map.
+     * @param edges - vector of edges to draw onto map.
+     * @returns PNG of mercator map with graph.
+     */
+    PNG* drawMap(vector<Vertex> vertices, vector<Edge> edges);
         
   private:
     Graph g_;

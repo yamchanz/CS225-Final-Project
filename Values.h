@@ -4,7 +4,7 @@ using std::string;
 
 
 class Values {
-    public:
+  public:
     Values(string name, string city, string country, string code, long double latitude, long double longitude);
     Values();
     string to_string();
@@ -14,6 +14,6 @@ class Values {
     string code_;
     long double latitude_;
     long double longitude_;
-    private:
+  private:
 
 };
