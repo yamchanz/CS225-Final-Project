@@ -56,10 +56,21 @@ class Airport {
      */
     pair<long double, long double> toRadians(const pair<long double, long double> coord);
     /**
-     * Finds shortest path between two airport vertices using Dijkstra's algorithm.
+     * Finds shortest path between two airport vertices using BFS and not factoring in edge weights
+     * @param g - graph of the airports
+     * @param source - departure airport
+     * @param destination - arrival aiport
      * @returns vector of vertices of path.
      */
-    vector<Vertex> findShortestPath(Graph g, Vertex source, Vertex destination);
+    vector<Vertex> findShortestUnweightedPath(Graph g, Vertex source, Vertex destination);
+    /**
+     * Finds shortest path between two airport vertices using Dijkstra's algorithm.
+     * @param g - graph of the airports
+     * @param source - departure airport
+     * @param destination - arrival aiport
+     * @returns vector of vertices of path.
+     */
+    vector<Vertex> findShortestWeightedPath(Graph g, Vertex source, Vertex destination);
     /**
      * Draws vertices and edges onto a mercator projection PNG.
      * Using PNG "Planeet Zee" by De Hauwere, Nathalie from marineregions.org

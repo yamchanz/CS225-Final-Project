@@ -134,7 +134,70 @@ pair<long double, long double> Airport::toRadians(const pair<long double, long d
 	return temp; 
 }
 
-vector<Vertex> Airport::findShortestPath(Graph g_, Vertex source, Vertex destination){
+vector<Vertex> Airport::findShortestUnweightedPath(Graph g_, Vertex source, Vertex destination){
+    unordered_map<Vertex, Vertex> prev; //stores previous vertices for every visited vertex
+    std::queue<Vertex> q; //queues all vertices for the BFS
+    unordered_map<Vertex, bool> visited; //keeps track of which vertices have been visited
+    vector<Vertex> vertices = g_.getVertices(); //vertices from our graph
+
+    //initializes our data structures
+    for (unsigned i = 0; i < vertices.size(); i++) {
+        if (vertices[i] == source) {
+            visited[source] = true;
+            prev[source] = destination; //no other vertex should have a predecessor of the destination
+            q.push(source);
+        } else {
+            visited[vertices[i]] = false;
+        }
+    }
+
+    bool flag = false; //used to exit while loop once our destination is found
+    while (!(q.empty())) {
+        Vertex v = q.front();
+        q.pop();
+        vector<Vertex> adj = g_.getAdjacent(v); //neighbors of current vertex
+
+        //goes through current nodes neighbors and adds them to queue
+        for (unsigned i = 0; i < adj.size(); i++) {
+            if (visited[adj[i]] == false) {
+                visited[adj[i]] = true; //marks vertex as visited
+                prev[adj[i]] = v; //adds current vertex as predecessor for its neighbor
+                q.push(adj[i]);
+
+                //if the destination is reached, exit the for loop
+                if (adj[i] == destination) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        //if the destination has been found, exit the while loop
+        if (flag) {
+            break;
+        }
+    }
+
+    vector<Vertex> path; //stores the vertices needed to form a path between the source and destination
+
+    //if flag is still false, then the destination was never found
+    if (flag == false) {
+        std::cout<<"No path between source and destination exists \n";
+        return path;
+    } else {
+        Vertex curr = destination;
+
+        //add predecessors of the current vertex until the source is reached
+        while(prev[curr] != destination) {
+            path.push_back(curr);
+            curr = prev[curr];
+        }
+        path.push_back(source); //add the source to the path
+        std::reverse(path.begin(), path.end()); //reverse the path so that it goes from the source to the destination
+        return path;
+    }
+}
+
+vector<Vertex> Airport::findShortestWeightedPath(Graph g_, Vertex source, Vertex destination){
     long double maxDist = 24859.734; //earth's circumference
     unordered_map<Vertex, double> distances;
     unordered_map<Vertex, Vertex> prev;
@@ -156,6 +219,8 @@ vector<Vertex> Airport::findShortestPath(Graph g_, Vertex source, Vertex destina
         std::push_heap(std::begin(v), std::end(v), compare);
     }
     
+    bool flag = true;
+
     while (!(v.empty())) {
         std::pop_heap(std::begin(v), std::end(v), compare);
         Vertex min = v.back();
@@ -165,6 +230,7 @@ vector<Vertex> Airport::findShortestPath(Graph g_, Vertex source, Vertex destina
                 path.push_back(min);
                 min = prev[min];
             }
+            flag = false;
             break;
         }
         if (distances[min] == maxDist) {
@@ -179,6 +245,9 @@ vector<Vertex> Airport::findShortestPath(Graph g_, Vertex source, Vertex destina
                 std::make_heap(std::begin(v), std::end(v), compare);
             }
         }
+    }
+    if (flag) {
+        std::cout<<"No path between source and destination exists \n";
     }
     return path;
 }
