@@ -287,13 +287,96 @@ PNG* Airport::drawMap(){
             drawMapHelper(map, source_lat, source_long, dest_lat, dest_long);
         }
     }
+
+    map->writeToFile("Out.png");
     return map;
 }
 
 void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long double dLat, long double dLong){
-    const unsigned mapWidth = 1250;
-    const unsigned mapHeight = 1400; 
-//might have to do straight line
-    
+    pair<int , int> sourceXY = coordToXY(sLat, sLong);
+    pair<int , int> destXY = coordToXY(dLat, dLong);
+    int x0 = sourceXY.first; 
+    int y0 = sourceXY.second;
+    int x1 = destXY.first;
+    int y1 = destXY.second;
 
+    int dx, dy;
+    int stepx, stepy;
+    dx = x1 - x0;
+    dy = y1 - y0;
+
+    const int mapWidth = 1250;
+    const int mapHeight = 1175;
+
+    //bresenham's algorithm from csustan.edu
+    if(dy < 0){ dy = -dy; stepy = -1; }
+    else{ stepy = 1; }
+    if(dx < 0){ dx = -dx; stepx = -1; }
+    else{ stepx = 1; }
+    dy <<= 1; 
+    dx <<= 1;
+    
+    if((0 <= x0) && (x0 < mapWidth) && (0 <= y0) && (y0 < mapHeight)){
+        HSLAPixel & pixel = map->getPixel(x0, y0);
+        pixel.h = 0;
+        pixel.s = 1;
+        pixel.l = 0.5;
+        pixel.a = 1;
+    }
+    
+    if(dx > dy){
+        int fraction = dy - (dx >> 1);
+        while(x0 != x1){
+            if(fraction >= 0){
+                y0 += stepy;
+                fraction -= dx;
+            }
+            x0 += stepx;
+            fraction += dy;
+            if((0 <= x0) && (x0 < mapWidth) && (0 <= y0) && (y0 < mapHeight)){
+                HSLAPixel & pixel = map->getPixel(x0, y0);
+                pixel.h = 0;
+                pixel.s = 1;
+                pixel.l = 0.5;
+                pixel.a = 1;
+            }
+        }
+    }
+    else{
+        int fraction = dx - (dy >> 1);
+        while(y0 != y1){
+            if(fraction >= 0){
+                x0 += stepx;
+                fraction -= dy;
+            }
+            y0 += stepy;
+            fraction += dx;
+            if((0 <= x0) && (x0 < mapWidth) && (0 <= y0) && (y0 < mapHeight)){
+                HSLAPixel & pixel = map->getPixel(x0, y0);
+                pixel.h = 0;
+                pixel.s = 1;
+                pixel.l = 0.5;
+                pixel.a = 1;
+            }
+        }
+
+    }
+
+}
+
+pair<int , int> Airport::coordToXY(long double latitude, long double longitude){
+    pair<int, int> XY;
+    const int mapWidth = 1250;
+    const int mapHeight = 1400;
+
+    //get x val and convert latitude from degrees to radians
+    long double x = (longitude + 180) * (mapWidth / 360);
+    long double latRad = latitude * M_PI / 180;
+
+    //get y val
+    long double mercN = log(tan((M_PI / 4) + (latRad / 2)));
+    long double y = (mapHeight / 2) - (mapWidth * mercN / (2 * M_PI));
+
+    XY.first = x; XY.second = y;
+    return XY;
 }

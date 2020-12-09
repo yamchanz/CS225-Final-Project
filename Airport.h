@@ -89,6 +89,13 @@ class Airport {
      */
     void drawMapHelper(PNG* map, long double sLat, long double sLong, long double dLat, long double dLong);
     /**
+     * Converts coordinates to pair of x, y values for PNG output.
+     * @param latitude 
+     * @param longitude
+     * @returns pair of x, y cootdinates
+     */
+    pair<int, int> coordToXY(long double latitude, long double longitude);
+    /**
      * @returns airportList private variable.
      */ 
     std::unordered_map<string, Values> getAirportList();
