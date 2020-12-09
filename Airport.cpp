@@ -30,23 +30,28 @@ Airport::Airport(std::string portFile, std::string routeFile)
                 if (c == ',') {
                     commas++;
                     //parse the sections and save to the value keyed pair
-                    if (curr-prev <= 1) {break;}
+                    
                     if (commas == 2) {
+                        if (curr-prev <= 1) {break;}
                         str = line.substr(prev + 1, curr-prev - 3);
                         V.name_ = str;}
                     else if (commas == 3) {
+                        if (curr-prev <= 1) {break;}
                         str = line.substr(prev + 1, curr-prev - 3);
                         V.city_ = str;}
                     else if (commas == 4) {
+                        if (curr-prev <= 1) {break;}
                         str = line.substr(prev + 1, curr-prev - 3);
                         V.country_ = str;}
                     //doesnt add the item if the code isn't exactly 3 letters
                     else if (commas == 5) {
+                        if (curr-prev <= 1) {break;}
                         str = line.substr(prev + 1, curr-prev - 3);
                         if (str.length() != 3) {
                             break;}
                         V.code_ = str;}
                     else if (commas == 7) {
+                        if (curr-prev <= 1) {break;}
                         //i have no idea why this is minus 1 and not 2
                         str = line.substr(prev, curr-prev - 1);
                         //catch blocks in case position does not have double data
@@ -57,6 +62,7 @@ Airport::Airport(std::string portFile, std::string routeFile)
                         }
                     }
                     else if (commas == 8) {
+                        if (curr-prev <= 1) {break;}
                         str = line.substr(prev, curr-prev - 1);
                         try{V.longitude_ = std::stold(str);}
                         catch (std::exception& e) {
@@ -89,10 +95,14 @@ Airport::Airport(std::string portFile, std::string routeFile)
                 if (c == ',') {
                     commas2++;
                     //parse source and destination 3 letter codes
-                    if (curr2-prev2 <= 1) {break;}
+                    
                     str2 = line2.substr(prev2, curr2-prev2 - 1);
-                    if (commas2 == 3) {source = str2;}
+                    if (commas2 == 3) {
+                        if (curr2-prev2 <= 1) {break;}
+                        source = str2;
+                    }
                     else if (commas2 == 5) {
+                        if (curr2-prev2 <= 1) {break;}
                         //populates graph with weighted edge of distance
                         //if (source.length() != 3 || str2.length() != 3) {break;}
                         g_.insertEdge(source,str2);

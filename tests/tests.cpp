@@ -7,7 +7,7 @@
 
 using std::string;
 
-TEST_CASE("constructor unordered map", "[weight=1][part=1]") {
+/*TEST_CASE("constructor unordered map", "[weight=1][part=1]") {
   Values x1("name:1","city:1","country:1","C:1",1.1,1.1);
   Values x2("name:2","city:2","country:2","C:2",2.22,2.22);
   Values x3("name:3","city:3","country:3","C:3",3.333,3.333);
@@ -63,7 +63,7 @@ TEST_CASE("constructor graph creation", "[weight=1][part=1]") {
     REQUIRE(graph.edgeExists(edge.source, edge.dest));
   }
   REQUIRE(!graph.edgeExists(eFail.source, eFail.dest));
-}
+}*/
 
 TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
   Airport temp("data/hardAirports.txt","data/hardRoutes.txt");
@@ -72,6 +72,12 @@ TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
   vector<Vertex> path3 = temp.findShortestWeightedPath(temp.getGraph(),"C:8","C:2");
   vector<Vertex> path4 = temp.findShortestWeightedPath(temp.getGraph(),"C:2","C:8");
   vector<Vertex> path5 = temp.findShortestWeightedPath(temp.getGraph(),"C15","C13");
+
+  //for (unsigned i = 0; i < temp.getGraph().getVertices().size(); i++) {
+  //  std::cout<<temp.getGraph().getVertices()[i];
+  //}
+
+  //std::cout<<temp.getGraph().getVertices().size();
 
   vector<string> compare1 = {"C14","C12","C:4","C:2","C:3"};
   vector<string> compare2 = {"C14","C12","C:8","C:7","C11"};
@@ -137,13 +143,13 @@ TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
   
 }
 
-TEST_CASE("findShortestUnweightedPath works as intended", "[weight=1][part=2]") {
+/*TEST_CASE("findShortestUnweightedPath works as intended", "[weight=1][part=2]") {
   Airport temp("data/hardAirports.txt","data/hardRoutes.txt");
-  vector<Vertex> path1 = temp.findShortestWeightedPath(temp.getGraph(),"C14","C:3");
-  vector<Vertex> path2 = temp.findShortestWeightedPath(temp.getGraph(),"C14","C11");
-  vector<Vertex> path3 = temp.findShortestWeightedPath(temp.getGraph(),"C:8","C:2");
-  vector<Vertex> path4 = temp.findShortestWeightedPath(temp.getGraph(),"C:2","C:8");
-  vector<Vertex> path5 = temp.findShortestWeightedPath(temp.getGraph(),"C15","C13");
+  vector<Vertex> path1 = temp.findShortestUnweightedPath(temp.getGraph(),"C14","C:3");
+  vector<Vertex> path2 = temp.findShortestUnweightedPath(temp.getGraph(),"C14","C11");
+  vector<Vertex> path3 = temp.findShortestUnweightedPath(temp.getGraph(),"C:8","C:2");
+  vector<Vertex> path4 = temp.findShortestUnweightedPath(temp.getGraph(),"C:2","C:8");
+  vector<Vertex> path5 = temp.findShortestUnweightedPath(temp.getGraph(),"C15","C13");
 
   vector<string> compare1 = {"C14","C12","C:4","C:2","C:3"};
   vector<string> compare2 = {"C14","C12","C:8","C:7","C11"};
@@ -206,4 +212,4 @@ TEST_CASE("findShortestUnweightedPath works as intended", "[weight=1][part=2]") 
     }
     REQUIRE(route5Works);
   }
-}
+}*/
