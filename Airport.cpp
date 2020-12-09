@@ -198,44 +198,55 @@ vector<Vertex> Airport::findShortestUnweightedPath(Graph g_, Vertex source, Vert
 }
 
 vector<Vertex> Airport::findShortestWeightedPath(Graph g_, Vertex source, Vertex destination){
-    long double maxDist = 24859.734; //earth's circumference
-    unordered_map<Vertex, double> distances;
-    unordered_map<Vertex, Vertex> prev;
-    vector<Vertex> vertices = g_.getVertices();
-    vector<Vertex> v;
-    vector<Vertex> path;
+    long double maxDist = 24859.734; //earth's circumference and the maximum possible distance of a flight
+    unordered_map<Vertex, double> distances; //stores each vertex with its distance from the source vertex
+    unordered_map<Vertex, Vertex> prev; //stores each vertex's previous vertex from the path to reach the vertex from the source
+    vector<Vertex> vertices = g_.getVertices(); //vertices from our graph
+    vector<Vertex> v; //vector to store vertices of interest   
+    vector<Vertex> path; //path of vectors from the source to the destination
 
+    //compare function to find the vertex with a shorter distance from the source
     auto compare = [&](Vertex left, Vertex right) { 
         return distances[left] > distances[right]; 
     };
 
+    //initializes all the data structures with the appropiate values
     for (unsigned i = 0; i < vertices.size(); i++) {
         if (vertices[i] == source) {
-            distances[source] = 0;
+            distances[source] = 0; //source's distance is 0
         } else {
-            distances[vertices[i]] = maxDist;
+            distances[vertices[i]] = maxDist; //every other vertex's distance is intially set to maxDist
         }
         v.push_back(vertices[i]);
-        std::push_heap(std::begin(v), std::end(v), compare);
+        std::push_heap(std::begin(v), std::end(v), compare); //creates a min-heap priority queue of every vertex
     }
     
-    bool flag = true;
+    bool flag = true; //flag to check if the destination is found
 
     while (!(v.empty())) {
-        std::pop_heap(std::begin(v), std::end(v), compare);
-        Vertex min = v.back();
+        std::pop_heap(std::begin(v), std::end(v), compare); //pop's minimum distance vertex from queue and re-heapifies adding the min to the back
+        Vertex min = v.back(); //minimum distance vertex extracted from the back of v
         v.pop_back();
+
+        //if the destination has been reached
         if (min == destination) {
+
+            //create a path from the destination to the vertex
             while (prev.find(min) != std::end(prev)) {
                 path.push_back(min);
                 min = prev[min];
             }
-            flag = false;
+            std::reverse(path.begin(), path.end()); //reverses path so its from source to destination
+            flag = false; //change flag to mark destination as found
             break;
         }
+
+        //break while loop if node is disconnected
         if (distances[min] == maxDist) {
             break;
         }
+        
+        //add proper distances to neighbor nodes of v
         std::vector<Vertex> adj = g_.getAdjacent(min);
         for (unsigned i = 0; i < adj.size(); i++) {
             double comp = distances[min] + findWeight(min, adj[i]);
