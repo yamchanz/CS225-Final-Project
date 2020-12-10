@@ -6,14 +6,14 @@
 
 
 int main() {
-    std::cout << "start" << std::endl;
-    Airport temp("testAirports.txt", "testRoutes.txt");
-    std::cout << "past constructor" << std::endl;
-    std::unordered_map<string, Values> list = temp.getAirportList();
-    std::cout << "past list" << std::endl;
-    for (auto code : list) {
-        std::cout << code.second.to_string() << std::endl;
-    }
+    
+    Airport airport("data/hardAirports.txt","data/hardRoutes.txt");
+    PNG* map = new PNG();
+    map->readFromFile("mercatorMap.png");
+    //airport.drawMap();
+    airport.drawMapHelper(map, -80,-90, 80, 100);
+    airport.drawMapHelper(map, 80,-90, -80, 100);
 
+    map->writeToFile("Out.png");
     return 0;
 }

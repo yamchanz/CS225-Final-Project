@@ -3,6 +3,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <exception>
+#include <algorithm>
 
 using std::string;
 
@@ -95,7 +96,6 @@ Airport::Airport(std::string portFile, std::string routeFile)
                 if (c == ',') {
                     commas2++;
                     //parse source and destination 3 letter codes
-                    
                     str2 = line2.substr(prev2, curr2-prev2 - 1);
                     if (commas2 == 3) {
                         if (curr2-prev2 <= 1) {break;}
@@ -132,7 +132,7 @@ long double Airport::calcDistance(pair<long double, long double> coord1, pair<lo
 	long double ans = pow(sin(dlat / 2), 2) + 
 			      cos(radCoord1.first) * cos(radCoord2.first) *
 			      pow(sin(dlong / 2), 2);
-	ans = asin(sqrt(ans) * 2); 
+	ans = asin(sqrt(ans)) * 2;
 	long double R = 3958.8;
 	return ans * R;
 }
@@ -144,11 +144,11 @@ pair<long double, long double> Airport::toRadians(const pair<long double, long d
 	return temp; 
 }
 
-vector<Vertex> Airport::findShortestUnweightedPath(Graph g_, Vertex source, Vertex destination){
+vector<Vertex> Airport::findShortestUnweightedPath(Graph g, Vertex source, Vertex destination){
     unordered_map<Vertex, Vertex> prev; //stores previous vertices for every visited vertex
     std::queue<Vertex> q; //queues all vertices for the BFS
     unordered_map<Vertex, bool> visited; //keeps track of which vertices have been visited
-    vector<Vertex> vertices = g_.getVertices(); //vertices from our graph
+    vector<Vertex> vertices = g.getVertices(); //vertices from our graph
 
     //initializes our data structures
     for (unsigned i = 0; i < vertices.size(); i++) {
@@ -165,7 +165,7 @@ vector<Vertex> Airport::findShortestUnweightedPath(Graph g_, Vertex source, Vert
     while (!(q.empty())) {
         Vertex v = q.front();
         q.pop();
-        vector<Vertex> adj = g_.getAdjacent(v); //neighbors of current vertex
+        vector<Vertex> adj = g.getAdjacent(v); //neighbors of current vertex
 
         //goes through current nodes neighbors and adds them to queue
         for (unsigned i = 0; i < adj.size(); i++) {
@@ -207,11 +207,11 @@ vector<Vertex> Airport::findShortestUnweightedPath(Graph g_, Vertex source, Vert
     }
 }
 
-vector<Vertex> Airport::findShortestWeightedPath(Graph g_, Vertex source, Vertex destination){
+vector<Vertex> Airport::findShortestWeightedPath(Graph g, Vertex source, Vertex destination){
     long double maxDist = 24859.734; //earth's circumference and the maximum possible distance of a flight
     unordered_map<Vertex, double> distances; //stores each vertex with its distance from the source vertex
     unordered_map<Vertex, Vertex> prev; //stores each vertex's previous vertex from the path to reach the vertex from the source
-    vector<Vertex> vertices = g_.getVertices(); //vertices from our graph
+    vector<Vertex> vertices = g.getVertices(); //vertices from our graph
     vector<Vertex> v; //vector to store vertices of interest   
     vector<Vertex> path; //path of vectors from the source to the destination
 
@@ -237,15 +237,23 @@ vector<Vertex> Airport::findShortestWeightedPath(Graph g_, Vertex source, Vertex
         std::pop_heap(std::begin(v), std::end(v), compare); //pop's minimum distance vertex from queue and re-heapifies adding the min to the back
         Vertex min = v.back(); //minimum distance vertex extracted from the back of v
         v.pop_back();
-
+        
         //if the destination has been reached
         if (min == destination) {
 
             //create a path from the destination to the vertex
-            while (prev.find(min) != std::end(prev)) {
+            /*while (prev.find(min) != std::end(prev)) {
                 path.push_back(min);
                 min = prev[min];
+                
+            }*/
+            Vertex curr = destination;
+            while(curr != source) {
+                path.push_back(curr);
+                curr = prev[curr];
+                //std::cout<<prev[curr]<<std::endl;
             }
+            path.push_back(source);
             std::reverse(path.begin(), path.end()); //reverses path so its from source to destination
             flag = false; //change flag to mark destination as found
             break;
@@ -257,9 +265,9 @@ vector<Vertex> Airport::findShortestWeightedPath(Graph g_, Vertex source, Vertex
         }
         
         //add proper distances to neighbor nodes of v
-        std::vector<Vertex> adj = g_.getAdjacent(min);
+        std::vector<Vertex> adj = g.getAdjacent(min);
         for (unsigned i = 0; i < adj.size(); i++) {
-            double comp = distances[min] + findWeight(min, adj[i]);
+            double comp = distances[min] + g.getEdgeWeight(min, adj[i]);
             if (comp < distances[adj[i]]) {
                 distances[adj[i]] = comp;
                 prev[adj[i]] = min;
@@ -284,7 +292,15 @@ Graph Airport::getGraph() {
 PNG* Airport::drawMap(){
     PNG* map = new PNG;
     map->readFromFile("mercatorMap.png");
-    
+
+    vector<Edge> edges = g_.getEdges();
+    for (auto edge : edges) {
+        Values src = airportList[edge.source];
+        Values des = airportList[edge.dest];
+        std::cout << src.latitude_ << "," <<  src.longitude_ << "," << des.latitude_ << "," << des.longitude_ << std::endl;
+        drawMapHelper(map,src.latitude_, src.longitude_, des.latitude_, des.longitude_);
+    }
+/*
     for(auto it = airportList.begin(); it != airportList.end(); it++){
         Vertex source = it->first;
         Values val = it->second;
@@ -296,7 +312,7 @@ PNG* Airport::drawMap(){
             long double dest_long = airportList[dest].longitude_;
             drawMapHelper(map, source_lat, source_long, dest_lat, dest_long);
         }
-    }
+    }*/
 
     map->writeToFile("Out.png");
     return map;
@@ -317,7 +333,23 @@ void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long 
 
     const int mapWidth = 1250;
     const int mapHeight = 1175;
+    
+    /*if (x0 > x1) {
+        std::swap(x1,x0);
+        std::swap(y1,y0);
+    }
+    int y;
+    double slope = (y1-y0)/(x1-x0);
+    for (int x = x0; x < x1; x++) {
+        y = x*slope + x0;
+        HSLAPixel & pixel = map->getPixel(x, y);
+        pixel.h = 0;
+        pixel.s = 1;
+        pixel.l = 0.5;
+        pixel.a = 1;
+    }*/
 
+    
     //bresenham's algorithm from csustan.edu
     if(dy < 0){ dy = -dy; stepy = -1; }
     else{ stepy = 1; }
@@ -377,7 +409,7 @@ void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long 
 pair<int , int> Airport::coordToXY(long double latitude, long double longitude){
     pair<int, int> XY;
     const int mapWidth = 1250;
-    const int mapHeight = 1400;
+    const int mapHeight = 1175;
 
     //get x val and convert latitude from degrees to radians
     long double x = (longitude + 180) * (mapWidth / 360);

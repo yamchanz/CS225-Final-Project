@@ -5,9 +5,10 @@
 #include "../cs225/HSLAPixel.h"
 #include <iostream>
 
+
 using std::string;
 
-/*TEST_CASE("constructor unordered map", "[weight=1][part=1]") {
+TEST_CASE("constructor unordered map", "[weight=1][part=1]") {
   Values x1("name:1","city:1","country:1","C:1",1.1,1.1);
   Values x2("name:2","city:2","country:2","C:2",2.22,2.22);
   Values x3("name:3","city:3","country:3","C:3",3.333,3.333);
@@ -31,7 +32,7 @@ using std::string;
   }
 }
 
-TEST_CASE("constructor graph creation", "[weight=1][part=1]") {
+TEST_CASE("constructor graph creation", "[weight=1][part=2]") {
   Values x1("name:1","city:1","country:1","C:1",1.1,1.1);
   Values x2("name:2","city:2","country:2","C:2",2.22,2.22);
   Values x3("name:3","city:3","country:3","C:3",3.333,3.333);
@@ -63,15 +64,21 @@ TEST_CASE("constructor graph creation", "[weight=1][part=1]") {
     REQUIRE(graph.edgeExists(edge.source, edge.dest));
   }
   REQUIRE(!graph.edgeExists(eFail.source, eFail.dest));
-}*/
+}
 
-TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
+TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=3]") {
   Airport temp("data/hardAirports.txt","data/hardRoutes.txt");
+  std::cout << "here:0" << std::endl;
   vector<Vertex> path1 = temp.findShortestWeightedPath(temp.getGraph(),"C14","C:3");
+  std::cout << "here:1" << std::endl;
   vector<Vertex> path2 = temp.findShortestWeightedPath(temp.getGraph(),"C14","C11");
+  std::cout << "here:2" << std::endl;
   vector<Vertex> path3 = temp.findShortestWeightedPath(temp.getGraph(),"C:8","C:2");
+  std::cout << "here:3" << std::endl;
   vector<Vertex> path4 = temp.findShortestWeightedPath(temp.getGraph(),"C:2","C:8");
+  std::cout << "here:4" << std::endl;
   vector<Vertex> path5 = temp.findShortestWeightedPath(temp.getGraph(),"C15","C13");
+  std::cout << "here:5" << std::endl;
 
   //for (unsigned i = 0; i < temp.getGraph().getVertices().size(); i++) {
   //  std::cout<<temp.getGraph().getVertices()[i];
@@ -79,6 +86,7 @@ TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
 
   //std::cout<<temp.getGraph().getVertices().size();
 
+  std::cout << "here-1" << std::endl;
   vector<string> compare1 = {"C14","C12","C:4","C:2","C:3"};
   vector<string> compare2 = {"C14","C12","C:8","C:7","C11"};
   vector<string> compare3 = {"C:8","C:2"};
@@ -86,13 +94,16 @@ TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
   vector<string> compare5 = {"C15","C16","C17","C13"};
   bool route1Works,route2Works,route3Works,route4Works,route5Works;
   bool route1Exists,route2Exists,route3Exists,route4Exists,route5Exists;
-  
+
+  std::cout << "here0" << std::endl;
   route1Works = true;
   route1Exists = path1.size() != 0;
   REQUIRE(route1Exists);
+    std::cout << "here1" << std::endl;
   if (route1Exists) {
+    std::cout << "here2" << std::endl;
     for (unsigned i = 0; i < compare1.size(); i++) {
-    //std::cout << path1[i] << " vs " << compare1[i] << std::endl;
+    std::cout << path1[i] << " vs " << compare1[i] << std::endl;
     if (!(path1[i] == compare1[i])){route1Works = false;}
     }
     REQUIRE(route1Works);
@@ -104,19 +115,19 @@ TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
   REQUIRE(route2Exists);
   if (route2Exists) {
     for (unsigned i = 0; i < compare2.size(); i++) {
-    //std::cout << path2[i] << " vs " << compare2[i] << std::endl;
+    std::cout << path2[i] << " vs " << compare2[i] << std::endl;
     if (!(path2[i] == compare2[i])){route2Works = false;}
     }
     REQUIRE(route2Works);
   }
   
-
+  
   route3Works = true;
   route3Exists = path3.size() != 0;
   REQUIRE(route3Exists);
   if (route3Exists) {
     for (unsigned i = 0; i < compare3.size(); i++) {
-    //std::cout << path3[i] << " vs " << compare3[i] << std::endl;
+    std::cout << path3[i] << " vs " << compare3[i] << std::endl;
     if (!(path3[i] == compare3[i])){route3Works = false;}
     }
     REQUIRE(route3Works);
@@ -127,7 +138,7 @@ TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
   route4Works = true;
   route4Exists = path4.size() != 0;
   REQUIRE(!route4Exists);
-  
+  std::cout << "4th case" << std::endl;
   
 
   route5Works = true;
@@ -135,7 +146,7 @@ TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
   REQUIRE(route5Exists);
   if (route5Exists) {
     for (unsigned i = 0; i < compare5.size(); i++) {
-    //std::cout << path5[i] << " vs " << compare5[i] << std::endl;
+    std::cout << path5[i] << " vs " << compare5[i] << std::endl;
     if (!(path5[i] == compare5[i])){route5Works = false;}
     }
     REQUIRE(route5Works);
@@ -143,7 +154,7 @@ TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
   
 }
 
-/*TEST_CASE("findShortestUnweightedPath works as intended", "[weight=1][part=2]") {
+TEST_CASE("findShortestUnweightedPath works as intended", "[weight=1][part=4]") {
   Airport temp("data/hardAirports.txt","data/hardRoutes.txt");
   vector<Vertex> path1 = temp.findShortestUnweightedPath(temp.getGraph(),"C14","C:3");
   vector<Vertex> path2 = temp.findShortestUnweightedPath(temp.getGraph(),"C14","C11");
@@ -212,4 +223,35 @@ TEST_CASE("findShortestWeightedPath works as intended", "[weight=1][part=2]") {
     }
     REQUIRE(route5Works);
   }
-}*/
+}
+
+TEST_CASE("simple findWeightedShortestPath", "[weight=1][part=5]") {
+  Graph graph(true,true);
+  graph.insertVertex("C:1");
+  graph.insertVertex("C:2");
+  graph.insertVertex("C:3");
+  graph.insertVertex("C:4");
+  graph.insertEdge("C:1","C:4");
+  graph.insertEdge("C:1","C:2");
+  graph.insertEdge("C:2","C:3");
+  graph.insertEdge("C:3","C:4");
+  graph.setEdgeWeight("C:1","C:2",1);
+  graph.setEdgeWeight("C:2","C:3",1);
+  graph.setEdgeWeight("C:3","C:4",1);
+  graph.setEdgeWeight("C:1","C:4",4);
+  Airport temp("data/testAirports.txt","data/testRoutes.txt");
+  vector<Vertex> path = temp.findShortestWeightedPath(graph,"C:1","C:4");
+  vector<Vertex> compare = {"C:1","C:2","C:3","C:4"};
+
+  bool routeWorks = true;
+  bool routeExists = true;
+  routeExists = path.size() != 0;
+  REQUIRE(routeExists);
+  if (routeExists) {
+    for (unsigned i = 0; i < compare.size(); i++) {
+    std::cout << path[i] << " vs " << compare[i] << std::endl;
+    if (!(path[i] == compare[i])){routeWorks = false;}
+    }
+    REQUIRE(routeWorks);
+  }
+}
