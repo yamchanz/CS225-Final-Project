@@ -11,9 +11,18 @@ int main() {
     PNG* map = new PNG();
     map->readFromFile("mercatorMap.png");
     //airport.drawMap();
-    airport.drawMapHelper(map, -80,-90, 80, 100);
-    airport.drawMapHelper(map, 80,-90, -80, 100);
-
+    airport.drawMapHelper(map, -88,0, 88, 0);
+    airport.drawMapHelper(map, -88,-179, 88, 179);
+    airport.drawMapHelper(map, 88,-179, -88, 179);
+    airport.drawMapHelper(map, -44,-179, 44, 179);
+    airport.drawMapHelper(map, 44,-179, -44, 179);
+    airport.drawMapHelper(map, -22,-179, 22, 179);
+    airport.drawMapHelper(map, 22,-179, -22, 179);
+    airport.drawMapHelper(map, -11,-179, 11, 179);
+    airport.drawMapHelper(map, 11,-179, -11, 179);
+    airport.drawMapHelper(map, 0,-179, 0, 179);
+    // ORD to LHR
+    airport.drawMapHelper(map, 41.9742, -87.9073, 51.4700, -0.4543);
     map->writeToFile("Out.png");
     return 0;
 }

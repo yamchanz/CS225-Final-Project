@@ -331,8 +331,8 @@ void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long 
     dx = x1 - x0;
     dy = y1 - y0;
 
-    const int mapWidth = 1250;
-    const int mapHeight = 1175;
+    const int mapWidth = 1200;
+    const int mapHeight = 1200;
     
     /*if (x0 > x1) {
         std::swap(x1,x0);
@@ -408,14 +408,14 @@ void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long 
 
 pair<int , int> Airport::coordToXY(long double latitude, long double longitude){
     pair<int, int> XY;
-    const int mapWidth = 1250;
-    const int mapHeight = 1175;
+    const int mapWidth = 1200;
+    const int mapHeight = 1200;
 
     //get x val and convert latitude from degrees to radians
-    long double x = (longitude + 180) * (mapWidth / 360);
-    long double latRad = latitude * M_PI / 180;
+    long double x = fmod((longitude + 180) * mapWidth / 360, mapWidth + (mapWidth / 2));
 
     //get y val
+    long double latRad = latitude * M_PI / 180;
     long double mercN = log(tan((M_PI / 4) + (latRad / 2)));
     long double y = (mapHeight / 2) - (mapWidth * mercN / (2 * M_PI));
 
