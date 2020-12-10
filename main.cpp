@@ -71,19 +71,22 @@ int main(int argc, char* argv[]) {
     Airport airport("data/airports.txt","data/routes.txt");
     std::cout << ":::Airports and Routes Populated:::" << std::endl;
 
+    //Finds paths -- if possible -- and draws them on map using airport.h methods
     if (op == "DISTANCE") {
         std::cout << "calculating best route..." << std::endl;
         vector<Vertex> path = airport.findShortestWeightedPath(src,des);
         airport.drawPath(path);
         if (path.size() != 0) {
-            std::cout << ":::Shortest Route Drawn on Out.png:::" << std::endl;
+        std::cout << ":::Shortest Route Drawn on Out.png:::\n"
+        << "the cyan dot indicates the starting airport, the black dot is the destination airport" << std::endl;
         }
     } else if (op == "STOPS") {
         std::cout << "calculating best route..." << std::endl;
         vector<Vertex> path = airport.findShortestUnweightedPath(src,des);
         airport.drawPath(path);
         if (path.size() != 0) {
-            std::cout << ":::Shortest Route Drawn on Out.png:::" << std::endl;
+            std::cout << ":::Shortest Route Drawn on Out.png:::\n"
+            << "the cyan dot indicates the starting airport, the black dot is the destination airport" << std::endl;
         }
     } else {
         std::cout << "Not a valid operation parameter.  Chooose between DISTANCE or STOPS to find shortest route of the respective type."

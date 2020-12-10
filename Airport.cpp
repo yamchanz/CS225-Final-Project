@@ -301,6 +301,21 @@ void Airport::drawPath(vector<Vertex> path) {
         Values des = airportList[ path[i] ];
         drawMapHelper(map, src.latitude_, src.longitude_, des.latitude_, des.longitude_);
     }
+    if (path.size() > 0) {
+        Values start = airportList[path[0]];
+        Values end = airportList[path[path.size()-1]];
+        pair<int,int> startPixel = coordToXY(start.latitude_, start.longitude_);
+        pair<int,int> endPixel = coordToXY(end.latitude_, end.longitude_);
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++) {
+                map->getPixel(startPixel.first + x ,startPixel.second + y) = HSLAPixel(193,1,.5,1);
+                map->getPixel(endPixel.first + x,endPixel.second + y) = HSLAPixel(0,0,0,0);
+            }
+        }
+
+       
+    }
+    
     map->writeToFile("Out.png");
 }
 
