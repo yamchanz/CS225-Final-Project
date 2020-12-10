@@ -21,7 +21,10 @@ int main(int argc, char* argv[]) {
                 return 0;
             }
             //Populates Graph
-            if (index < 0 || index > 7400) {return 0;}
+            if (index < 0 || index > 7400) {
+                std::cout << "Not a valid number" << std::endl;
+                return 0;
+            }
             Airport airport("data/airports.txt","data/routes.txt");
             std::cout << ":::Airports and Routes Populated:::" << std::endl;
             int cnt = 0;
