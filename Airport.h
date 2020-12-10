@@ -63,14 +63,16 @@ class Airport {
      * @param destination - arrival aiport
      * @returns vector of vertices of path.
      */
+    vector<Vertex> findShortestUnweightedPath(Vertex source, Vertex destination);
     vector<Vertex> findShortestUnweightedPath(Graph g, Vertex source, Vertex destination);
     /**
      * Finds shortest path between two airport vertices using Dijkstra's algorithm.
-     * @param g - graph of the airports
+     * @param g - graph of the airports (defaults to g_ -> private variable if not given)
      * @param source - departure airport
      * @param destination - arrival aiport
      * @returns vector of vertices of path.
      */
+    vector<Vertex> findShortestWeightedPath(Vertex source, Vertex destination);
     vector<Vertex> findShortestWeightedPath(Graph g, Vertex source, Vertex destination);
     /**
      * Draws vertices and edges onto a mercator projection PNG.
@@ -103,6 +105,8 @@ class Airport {
      * @returns g_ (graph) private variable.
      */ 
     Graph getGraph();
+
+    void drawPath(vector<Vertex> path);
   private:
     Graph g_;
     Vertex startingVertex_;

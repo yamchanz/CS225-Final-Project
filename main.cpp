@@ -7,11 +7,14 @@
 
 int main() {
     
-    Airport airport("data/hardAirports.txt","data/hardRoutes.txt");
-    PNG* map = new PNG();
-    map->readFromFile("mercatorMap.png");
-    //airport.drawMap();
-    airport.drawMapHelper(map, -88,0, 88, 0);
+    Airport airport("data/airports.txt","data/smallerRoutes.txt");
+    std::cout << "constructor done" << std::endl;
+    airport.drawMap();
+    //PNG* map = new PNG();
+    //map->readFromFile("mercatorMap.png");
+    //vector<Vertex> path = airport.findShortestWeightedPath("C:6","C13");
+    //airport.drawPath(path);
+    /*airport.drawMapHelper(map, -88,0, 88, 0);
     airport.drawMapHelper(map, -88,-179, 88, 179);
     airport.drawMapHelper(map, 88,-179, -88, 179);
     airport.drawMapHelper(map, -44,-179, 44, 179);
@@ -22,7 +25,7 @@ int main() {
     airport.drawMapHelper(map, 11,-179, -11, 179);
     airport.drawMapHelper(map, 0,-179, 0, 179);
     // ORD to LHR
-    airport.drawMapHelper(map, 41.9742, -87.9073, 51.4700, -0.4543);
-    map->writeToFile("Out.png");
+    airport.drawMapHelper(map, 41.9742, -87.9073, 51.4700, -0.4543);*/
+    //map->writeToFile("Out.png");
     return 0;
 }

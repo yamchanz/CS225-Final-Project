@@ -143,7 +143,9 @@ pair<long double, long double> Airport::toRadians(const pair<long double, long d
 	temp.second = coord.second * M_PI / 180;
 	return temp; 
 }
-
+vector<Vertex> Airport::findShortestUnweightedPath(Vertex source, Vertex destination) {
+    return findShortestUnweightedPath(g_, source, destination);
+}
 vector<Vertex> Airport::findShortestUnweightedPath(Graph g, Vertex source, Vertex destination){
     unordered_map<Vertex, Vertex> prev; //stores previous vertices for every visited vertex
     std::queue<Vertex> q; //queues all vertices for the BFS
@@ -206,7 +208,9 @@ vector<Vertex> Airport::findShortestUnweightedPath(Graph g, Vertex source, Verte
         return path;
     }
 }
-
+vector<Vertex> Airport::findShortestWeightedPath(Vertex source, Vertex destination) {
+    return findShortestWeightedPath(g_, source, destination);
+}
 vector<Vertex> Airport::findShortestWeightedPath(Graph g, Vertex source, Vertex destination){
     long double maxDist = 24859.734; //earth's circumference and the maximum possible distance of a flight
     unordered_map<Vertex, double> distances; //stores each vertex with its distance from the source vertex
@@ -289,19 +293,37 @@ std::unordered_map<string, Values> Airport::getAirportList() {
 Graph Airport::getGraph() {
     return g_;
 }
+void Airport::drawPath(vector<Vertex> path) {
+    PNG* map = new PNG;
+    map->readFromFile("mercatorMap.png");
+    for (unsigned i = 1; i < path.size(); i++) {
+        Values src = airportList[ path[i-1] ];
+        Values des = airportList[ path[i] ];
+        drawMapHelper(map, src.latitude_, src.longitude_, des.latitude_, des.longitude_);
+    }
+    map->writeToFile("Out.png");
+}
 
-PNG* Airport::drawMap(){
+PNG* Airport::drawMap() {
     PNG* map = new PNG;
     map->readFromFile("mercatorMap.png");
 
-    vector<Edge> edges = g_.getEdges();
+    /*vector<Edge> edges = g_.getEdges();
     for (auto edge : edges) {
         Values src = airportList[edge.source];
         Values des = airportList[edge.dest];
-        std::cout << src.latitude_ << "," <<  src.longitude_ << "," << des.latitude_ << "," << des.longitude_ << std::endl;
+        if (src.latitude_ == 0 || src.longitude_ == 0) {
+            std::cout << "codesrc: " << src.code_ << endl;
+            std::cout << "codedes: " << des.code_ << endl;
+        }
+        if (des.latitude_ == 0 || des.longitude_ == 0) {
+            std::cout << "codesrc: " << src.code_ << endl;
+            std::cout << "codedes: " << des.code_ << endl;
+        }
+        //std::cout << src.latitude_ << "," <<  src.longitude_ << "," << des.latitude_ << "," << des.longitude_ << std::endl;
         drawMapHelper(map,src.latitude_, src.longitude_, des.latitude_, des.longitude_);
-    }
-/*
+    }*/
+
     for(auto it = airportList.begin(); it != airportList.end(); it++){
         Vertex source = it->first;
         Values val = it->second;
@@ -313,7 +335,7 @@ PNG* Airport::drawMap(){
             long double dest_long = airportList[dest].longitude_;
             drawMapHelper(map, source_lat, source_long, dest_lat, dest_long);
         }
-    }*/
+    }
 
     map->writeToFile("Out.png");
     return map;
