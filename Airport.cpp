@@ -241,12 +241,13 @@ vector<Vertex> Airport::findShortestWeightedPath(Graph g, Vertex source, Vertex 
         //if the destination has been reached
         if (min == destination) {
 
-            //create a path from the destination to the vertex
             /*while (prev.find(min) != std::end(prev)) {
                 path.push_back(min);
                 min = prev[min];
                 
             }*/
+		
+	    //create a path from the destination to the vertex
             Vertex curr = destination;
             while(curr != source) {
                 path.push_back(curr);
