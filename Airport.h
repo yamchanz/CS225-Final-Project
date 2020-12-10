@@ -74,7 +74,7 @@ class Airport {
     vector<Vertex> findShortestWeightedPath(Graph g, Vertex source, Vertex destination);
     /**
      * Draws vertices and edges onto a mercator projection PNG.
-     * Using PNG "Planeet Zee" by De Hauwere, Nathalie from marineregions.org
+     * Using mercator image from Geocart map projection software 
      * Needs Graph g_ to be subset of data to work. 
      * @returns PNG of mercator map with graph.
      */

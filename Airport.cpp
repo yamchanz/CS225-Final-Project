@@ -334,23 +334,7 @@ void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long 
     const int mapWidth = 1200;
     const int mapHeight = 1200;
     
-    /*if (x0 > x1) {
-        std::swap(x1,x0);
-        std::swap(y1,y0);
-    }
-    int y;
-    double slope = (y1-y0)/(x1-x0);
-    for (int x = x0; x < x1; x++) {
-        y = x*slope + x0;
-        HSLAPixel & pixel = map->getPixel(x, y);
-        pixel.h = 0;
-        pixel.s = 1;
-        pixel.l = 0.5;
-        pixel.a = 1;
-    }*/
-
-    
-    //bresenham's algorithm from csustan.edu
+    //bresenham's algorithm adapted from csustan.edu
     if(dy < 0){ dy = -dy; stepy = -1; }
     else{ stepy = 1; }
     if(dx < 0){ dx = -dx; stepx = -1; }
@@ -411,7 +395,7 @@ pair<int , int> Airport::coordToXY(long double latitude, long double longitude){
     const int mapWidth = 1200;
     const int mapHeight = 1200;
 
-    //get x val and convert latitude from degrees to radians
+    //get x val 
     long double x = fmod((longitude + 180) * mapWidth / 360, mapWidth + (mapWidth / 2));
 
     //get y val
