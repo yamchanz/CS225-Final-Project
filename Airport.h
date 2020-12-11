@@ -88,8 +88,10 @@ class Airport {
      * @param sLong - source longitude in a route
      * @param dLat - destination latitude in a route
      * @param dLong - destination longitude in a route
+     * @param hue - choose hue, defaults to 0 (red)
      */
     void drawMapHelper(PNG* map, long double sLat, long double sLong, long double dLat, long double dLong);
+    void drawMapHelper(PNG* map, long double sLat, long double sLong, long double dLat, long double dLong, double hue);
     /**
      * Converts coordinates to pair of x, y values for PNG output.
      * @param latitude 
@@ -107,6 +109,10 @@ class Airport {
     Graph getGraph();
 
     void drawPath(vector<Vertex> path);
+    void drawPath(vector<Vertex> path, double hue);
+
+
+    void drawPathAdd(vector<Vertex> path, double hue);
   private:
     Graph g_;
     Vertex startingVertex_;

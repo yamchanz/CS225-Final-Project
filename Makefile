@@ -1,5 +1,5 @@
 # Executable names:
-EXE = final
+EXE = pathFinder
 TEST = test
 
 # Add all object files needed for compiling:

@@ -293,13 +293,40 @@ std::unordered_map<string, Values> Airport::getAirportList() {
 Graph Airport::getGraph() {
     return g_;
 }
-void Airport::drawPath(vector<Vertex> path) {
+
+void Airport::drawPathAdd(vector<Vertex> path, double hue) {
+    PNG* map = new PNG;
+    map->readFromFile("Out.png");
+    for (unsigned i = 1; i < path.size(); i++) {
+        Values src = airportList[ path[i-1] ];
+        Values des = airportList[ path[i] ];
+        drawMapHelper(map, src.latitude_, src.longitude_, des.latitude_, des.longitude_, hue);
+    }
+    if (path.size() > 0) {
+        Values start = airportList[path[0]];
+        Values end = airportList[path[path.size()-1]];
+        pair<int,int> startPixel = coordToXY(start.latitude_, start.longitude_);
+        pair<int,int> endPixel = coordToXY(end.latitude_, end.longitude_);
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++) {
+                map->getPixel(startPixel.first + x ,startPixel.second + y) = HSLAPixel(193,1,.5,1);
+                map->getPixel(endPixel.first + x,endPixel.second + y) = HSLAPixel(0,0,0,0);
+            }
+        }
+
+       
+    }
+    
+    map->writeToFile("Out.png");
+}
+
+void Airport::drawPath(vector<Vertex> path, double hue) {
     PNG* map = new PNG;
     map->readFromFile("mercatorMap.png");
     for (unsigned i = 1; i < path.size(); i++) {
         Values src = airportList[ path[i-1] ];
         Values des = airportList[ path[i] ];
-        drawMapHelper(map, src.latitude_, src.longitude_, des.latitude_, des.longitude_);
+        drawMapHelper(map, src.latitude_, src.longitude_, des.latitude_, des.longitude_, hue);
     }
     if (path.size() > 0) {
         Values start = airportList[path[0]];
@@ -356,7 +383,12 @@ PNG* Airport::drawMap() {
     return map;
 }
 
-void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long double dLat, long double dLong){
+void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long double dLat, long double dLong) {
+    drawMapHelper(map, sLat, sLong, dLat, dLong, 0);
+}
+
+void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long double dLat, long double dLong, double hue) {
+
     pair<int , int> sourceXY = coordToXY(sLat, sLong);
     pair<int , int> destXY = coordToXY(dLat, dLong);
     int x0 = sourceXY.first; 
@@ -382,7 +414,7 @@ void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long 
     
     if((0 <= x0) && (x0 < mapWidth) && (0 <= y0) && (y0 < mapHeight)){
         HSLAPixel & pixel = map->getPixel(x0, y0);
-        pixel.h = 0;
+        pixel.h = hue;
         pixel.s = 1;
         pixel.l = 0.5;
         pixel.a = 1;
@@ -399,7 +431,7 @@ void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long 
             fraction += dy;
             if((0 <= x0) && (x0 < mapWidth) && (0 <= y0) && (y0 < mapHeight)){
                 HSLAPixel & pixel = map->getPixel(x0, y0);
-                pixel.h = 0;
+                pixel.h = hue;
                 pixel.s = 1;
                 pixel.l = 0.5;
                 pixel.a = 1;
@@ -417,7 +449,7 @@ void Airport::drawMapHelper(PNG* map, long double sLat, long double sLong, long 
             fraction += dx;
             if((0 <= x0) && (x0 < mapWidth) && (0 <= y0) && (y0 < mapHeight)){
                 HSLAPixel & pixel = map->getPixel(x0, y0);
-                pixel.h = 0;
+                pixel.h = hue;
                 pixel.s = 1;
                 pixel.l = 0.5;
                 pixel.a = 1;

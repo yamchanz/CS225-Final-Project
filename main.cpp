@@ -9,6 +9,18 @@
 using std::string;
 
 int main(int argc, char* argv[]) {
+    //command line helpers
+    string call = argv[0];
+    string dataAirports = "data/airports.txt";
+    string dataRoutes = "data/smallerRoutes.txt";
+
+    string outVALIDROUTE = "\n\n\n:::Shortest Route Drawn on Out.png:::\nthe cyan dot indicates the starting airport, the black dot is the destination airport";
+    string outINVALIDROUTE = "Not a valid operation parameter.  Chooose between DISTANCE or STOPS to find shortest route of the respective type.";
+    string outHELP = "\nFIND THE SHORTEST ROUTE, VIA DISTANCE OR # OF STOPS, USING : \n" + call
+        + " [Type of operation (DISTANCE or STOPS)] [3-letter airport code source] [3-letter airport code destination]\n\nTO GET A LIST OF 100 AIRPORT CODES IN OUR DATA, USE :\n"
+        + call + " list [number < 5997]\n\n";
+
+
     //Gives list of 100 airports based on argv2 number parameter 
     if (argc == 3) {
         string list = argv[1];
@@ -21,11 +33,11 @@ int main(int argc, char* argv[]) {
                 return 0;
             }
             //Populates Graph
-            if (index < 0 || index > 7400) {
+            if (index < 0 || index > 5997) {
                 std::cout << "Not a valid number" << std::endl;
                 return 0;
             }
-            Airport airport("data/airports.txt","data/routes.txt");
+            Airport airport(dataAirports,dataRoutes);
             std::cout << ":::Airports and Routes Populated:::" << std::endl;
             int cnt = 0;
             std::unordered_map<string, Values> airportList = airport.getAirportList();
@@ -44,11 +56,7 @@ int main(int argc, char* argv[]) {
 
     //Makes sure the number of parameters is correct
     if (argc < 4) {
-        std::cout << "\nFIND THE SHORTEST ROUTE, VIA DISTANCE OR # OF STOPS, USING : \n" << argv[0]
-        << " [Type of operation (DISTANCE or STOPS)] [3-letter airport code source] [3-letter airport code destination]\n\n"
-        << "TO GET A LIST OF 100 AIRPORT CODES IN OUR DATA, USE :\n"
-        << argv[0] << " list [number < 7400]\n\n"
-        << std::endl;
+        std::cout << outHELP << std::endl;
         return 0;
     }
     //saves command-line arguments
@@ -71,29 +79,65 @@ int main(int argc, char* argv[]) {
     }
     
     //Populates Graph
-    Airport airport("data/airports.txt","data/routes.txt");
+    Airport airport(dataAirports, dataRoutes);
     std::cout << ":::Airports and Routes Populated:::" << std::endl;
+    std::unordered_map<string, Values> airportList = airport.getAirportList();
 
     //Finds paths -- if possible -- and draws them on map using airport.h methods
     if (op == "DISTANCE") {
         std::cout << "calculating best route..." << std::endl;
         vector<Vertex> path = airport.findShortestWeightedPath(src,des);
-        airport.drawPath(path);
+        airport.drawPath(path,0);
         if (path.size() != 0) {
-        std::cout << ":::Shortest Route Drawn on Out.png:::\n"
-        << "the cyan dot indicates the starting airport, the black dot is the destination airport" << std::endl;
+            std::cout << outVALIDROUTE << std::endl;
+
+            std::cout << "Route: ";
+            for (auto vertex : path) {
+                std::cout <<  " -> " << vertex << "(" << airportList[vertex].name_ << ")";
+            }
+            std::cout << std::endl;
         }
     } else if (op == "STOPS") {
         std::cout << "calculating best route..." << std::endl;
         vector<Vertex> path = airport.findShortestUnweightedPath(src,des);
-        airport.drawPath(path);
+        airport.drawPath(path,0);
         if (path.size() != 0) {
-            std::cout << ":::Shortest Route Drawn on Out.png:::\n"
-            << "the cyan dot indicates the starting airport, the black dot is the destination airport" << std::endl;
+            std::cout << outVALIDROUTE << std::endl;
+
+            std::cout << "Route: ";
+            for (auto vertex : path) {
+                std::cout <<  " -> " << vertex << "(" << airportList[vertex].name_ << ")";
+            }
+            std::cout << std::endl;
+        }
+    } else if (op == "BOTH") {
+        std::cout << "calculating best routes..." << std::endl;
+        vector<Vertex> pathUnweighted = airport.findShortestUnweightedPath(src,des);
+        airport.drawPath(pathUnweighted,0);
+        if (pathUnweighted.size() != 0) {
+            std::cout << outVALIDROUTE << std::endl;
+
+            std::cout << "RouteUnweighted: ";
+            for (auto vertex : pathUnweighted) {
+                std::cout <<  " -> " << vertex << "(" << airportList[vertex].name_ << ")";
+            }
+            std::cout << std::endl;
+
+
+            vector<Vertex> pathWeighted = airport.findShortestWeightedPath(src,des);
+            airport.drawPathAdd(pathWeighted,280);
+            if (pathWeighted.size() != 0) {
+            std::cout << outVALIDROUTE << std::endl;
+
+            std::cout << "RouteWeighted: ";
+            for (auto vertex : pathWeighted) {
+                std::cout <<  " -> " << vertex << "(" << airportList[vertex].name_ << ")";
+            }
+            std::cout << "\n\n The red line indicates the shortest route by stops, the violet indicates the shortest route by distance" << std::endl;
+            }
         }
     } else {
-        std::cout << "Not a valid operation parameter.  Chooose between DISTANCE or STOPS to find shortest route of the respective type."
-        << std::endl;
+        std::cout << outINVALIDROUTE << std::endl;
     }
     return 0;
 }
