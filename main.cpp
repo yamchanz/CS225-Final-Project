@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
         if (pathUnweighted.size() != 0) {
             std::cout << outVALIDROUTE << std::endl;
 
-            std::cout << "RouteUnweighted: ";
+            std::cout << "UnweightedRoute: ";
             for (auto vertex : pathUnweighted) {
                 std::cout <<  " -> " << vertex << "(" << airportList[vertex].name_ << ")";
             }
@@ -129,7 +129,7 @@ int main(int argc, char* argv[]) {
             if (pathWeighted.size() != 0) {
             std::cout << outVALIDROUTE << std::endl;
 
-            std::cout << "RouteWeighted: ";
+            std::cout << "WeightedRoute: ";
             for (auto vertex : pathWeighted) {
                 std::cout <<  " -> " << vertex << "(" << airportList[vertex].name_ << ")";
             }
